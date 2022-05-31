@@ -50,7 +50,7 @@ predictions = model.predict(test_ds)
 
 
 # //////////////////////////////////////// new metric to evaluate confidence levels
-ca.confidence_acc(predictions, test_labels)
+ca.confidence_acc(predictions, test_labels, 0.7)
 
 
 
