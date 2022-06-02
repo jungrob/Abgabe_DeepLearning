@@ -6,9 +6,10 @@ class Predictions:
     def __init__(self, predictions):
         self.all = predictions
         self.classes = np.argmax(predictions, axis=1)
-        self.confidence_all = tf.nn.softmax(predictions)
-        self.confidence_max = np.max(self.confidence_all(), 1)
-    matches = np.empty
+        #self.confidence_all = tf.nn.softmax(predictions)
+        self.confidence_max = np.max(tf.nn.softmax(predictions), 1)
+        self.matches = np.zeros(len(self.classes))
+
 
 
 
@@ -49,12 +50,12 @@ def print_highest(predictions, ground_truth):
 
 
 # predicted.classes, ground_truth, predicted.matches
-def find_matches(classes, ground_truth, matches):
-    for i in range(0, len(classes)):
-        if classes[i] == ground_truth[i]:
-            matches[i] = True
+def find_matches(prediction, ground_truth):
+    for i in range(0, len(prediction.classes)):
+        if prediction.classes[i] == ground_truth[i]:
+            prediction.matches[i] = True
         else:
-            matches[i] = False
+            prediction.matches[i] = False
 
 
 # Anpassung der predictions (nur confidence level >= Threshold zählt als Treffer (1) )
@@ -75,9 +76,8 @@ def count_matches(matches):
 
 
 # calculate accuracy
-def accuracy(num_matches):
-    return num_matches / np.len(num_matches) * 100
-
+def accuracy(num_matches, matches ):
+    return num_matches / len(matches) * 100
 
 
 
@@ -109,17 +109,15 @@ def confidence_acc(input_predictions, ground_truth, threshold):
     # -> It now contains the highest confidence level for each test image
     #predictions_max = np.max(predictions, 1)
 
-    find_matches(predicted.classes, ground_truth, predicted.matches)
+    find_matches(predicted, ground_truth)
     filter_matches(predicted.confidence_max, predicted.matches, threshold)
     num_matches = count_matches(predicted.matches)
-    my_accuracy = accuracy(num_matches)
+    my_accuracy = accuracy(num_matches, predicted.matches)
 
-    print("Acc@Threshold:", my_accuracy, "%")
+    print("Acc@",threshold*100,"%:", round(my_accuracy,1),"%")
 
-
-
-
-
+    #predicted.matches[0] = True
+    print("matches", predicted.matches)
 
 
    # accuracy = accuracy()
