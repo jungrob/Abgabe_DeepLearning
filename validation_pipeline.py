@@ -15,10 +15,11 @@ model = tf.keras.models.load_model(import_path)
 # //////////////////////////////////////// Load data
 # You will need to unzip the respective batch folders.
 # Obviously Batch_0 is not sufficient for testing as you will soon find out.
-data_root = "./safetyBatches/Batch_6/"
+data_root = "./safetyBatches/Batch_9/"
 batch_size = 32
 img_height = 224
 img_width = 224
+
 
 test_ds = tf.keras.utils.image_dataset_from_directory(
   data_root,
@@ -50,8 +51,9 @@ predictions = model.predict(test_ds)
 
 
 # //////////////////////////////////////// new metric to evaluate confidence levels
-ca.confidence_acc(predictions, test_labels, 0.4)
-
+#ca.confidence_acc(predictions, test_labels, 0.90)
+#ca.confidence_acc(predictions, test_labels)
+ca.confidence_acc(predictions, test_labels, 0)
 
 
 predictions = np.argmax(predictions, axis=1)
