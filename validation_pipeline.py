@@ -49,11 +49,13 @@ test_ds = test_ds.map(lambda x, y: (normalization_layer(x), y))  # Where x—ima
 predictions = model.predict(test_ds)
 
 
-
 # //////////////////////////////////////// new metric to evaluate confidence levels
-#ca.confidence_acc(predictions, test_labels, 0.90)
-#ca.confidence_acc(predictions, test_labels)
-ca.confidence_acc(predictions, test_labels, 0)
+if ca.testing():
+    print("All tests PASSED!")
+else: "Testing FAILED!"
+ca.confidence_acc(predictions, test_labels, 0.999)
+ca.confidence_acc(predictions, test_labels)
+# ////////////////////////////////////////
 
 
 predictions = np.argmax(predictions, axis=1)
